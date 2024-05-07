@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "courses-server"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.110.0"
+pandas = "^2.2.1"
+openpyxl = "^3.1.2"
+beanie = "^1.25.0"
+pydantic-settings = "^2.2.1"
+uvicorn = "^0.28.0"
+python-multipart = "^0.0.9"
+
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.3.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+lint.select = ["F", "E", "W", "C90", "I", "N", "Q"]
+lint.ignore = ["Q003"]

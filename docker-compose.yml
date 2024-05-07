@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+  app:
+    image: academ/courses-server:latest
+    container_name: courses-server
+    restart: unless-stopped
+    ports:
+      - '8000:8000'
+    environment:
+      - MONGO__URL=mongodb://user:pass@mongodb:27017
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:6-jammy
+    container_name: courses-mongo
+    restart: unless-stopped
+    expose:
+      - 27017
+    ports:
+      - '27017:27017'
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=user
+      - MONGO_INITDB_ROOT_PASSWORD=pass
+      - MONGO_INITDB_DATABASE=CoursesService
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
