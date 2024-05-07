@@ -1,0 +1,29 @@
+version: '3'
+
+tasks:
+  requirements.txt:
+    desc: Generate requirements.txt file from poetry.lock
+    cmds:
+      - poetry export -f requirements.txt --without-hashes --output requirements.txt
+    internal: True
+
+  build:
+    desc: Build docker image
+    deps: ["requirements.txt"]
+    cmds:
+      - docker build --tag ac/courses-api:latest .
+
+  run-mongo:
+    desc: Run local mongodb container
+    cmds:
+      - docker-compose up -d mongodb
+
+  run:
+    desc: Run the server with docker compose
+    cmds:
+      - docker-compose up -d
+
+  stop:
+    desc: Stop the local server
+    cmds:
+      - docker-compose down
