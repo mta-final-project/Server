@@ -28,6 +28,11 @@ tasks:
     cmds:
       - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 214284003688.dkr.ecr.us-east-1.amazonaws.com
 
+  run-mongo:
+    desc: Run local mongodb container
+    cmds:
+      - docker-compose up -d mongodb
+
   run:
     desc: Run the server with docker compose
     cmds:
