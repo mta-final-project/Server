@@ -1,5 +1,9 @@
 version: '3'
 
+env:
+  IMAGE_NAME: ac-courses-api
+  TAG: latest
+
 tasks:
   requirements.txt:
     desc: Generate requirements.txt file from poetry.lock
@@ -11,12 +15,18 @@ tasks:
     desc: Build docker image
     deps: ["requirements.txt"]
     cmds:
-      - docker build --tag ac/courses-api:latest .
+      - docker build --tag $IMAGE_NAME:$TAG .
 
-  run-mongo:
-    desc: Run local mongodb container
+  push:
+    desc: Push latest docker image
     cmds:
-      - docker-compose up -d mongodb
+      - docker tag $IMAGE_NAME:$TAG 214284003688.dkr.ecr.us-east-1.amazonaws.com/$IMAGE_NAME:$TAG
+      - docker push 214284003688.dkr.ecr.us-east-1.amazonaws.com/$IMAGE_NAME:$TAG
+
+  login:
+    desc: Log into aws ECR
+    cmds:
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 214284003688.dkr.ecr.us-east-1.amazonaws.com
 
   run:
     desc: Run the server with docker compose
