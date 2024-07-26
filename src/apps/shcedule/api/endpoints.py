@@ -1,7 +1,7 @@
 from beanie import PydanticObjectId
 from fastapi import APIRouter, HTTPException, Query, status
 
-from src.api.schedule.schemas import SelectedGroupsSchema, UpdateScheduleSchema
+from src.apps.shcedule.api.schemas import SelectedGroupsSchema, UpdateScheduleSchema
 from src.apps.courses.models import Course
 from src.apps.shcedule import service
 from src.apps.shcedule.models import CoursesSchedule, EnrichedGroup
