@@ -1,3 +1,4 @@
+from typing import Any
 from functools import lru_cache
 
 from pydantic_settings import SettingsConfigDict, BaseSettings as _BaseSettings
@@ -29,7 +30,17 @@ class CognitoSettings(BaseSettings):
     client_id: str = "6r70ag4thnsitfb378fh87tj92"
     pool_id: str = "us-east-1_U2F78N1y3"
     region: str = "us-east-1"
-    jwk_url: str = f"https://cognito-idp.{region}.amazonaws.com/{pool_id}/.well-known/jwks.json"
+    
+    check_expiration: bool = True
+    jwt_header_prefix: str = "Bearer"
+    jwt_header_name: str = "Authorization"
+    userpools: dict[str, dict[str, Any]] = {
+        "default": {
+            "region": region,
+            "userpool_id": pool_id,
+            "app_client_id": [client_id]
+        }
+    }
 
 
 class Settings(BaseSettings):
