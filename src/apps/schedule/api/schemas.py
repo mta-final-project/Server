@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from src.apps.shcedule.models import EnrichedGroup
+from src.apps.schedule.models import EnrichedGroup
 
 
 class SelectedGroupsSchema(BaseModel):

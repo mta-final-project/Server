@@ -2,7 +2,7 @@ from beanie import init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient
 
 from src.apps.courses.models import Course
-from src.apps.shcedule.models import CoursesSchedule
+from src.apps.schedule.models import CoursesSchedule
 
 
 async def init(mongo_url: str, mongo_database: str):

@@ -8,13 +8,7 @@ from src.apps.files.models import FileMetadata, FileInfo
 class S3Service:
     def __init__(self):
         self.settings = get_settings().s3
-        self.s3_client = boto3.client(
-            "s3",
-            region_name=self.settings.aws_region,
-            aws_access_key_id=self.settings.aws_access_key_id,
-            aws_secret_access_key=self.settings.aws_secret_access_key,
-            aws_session_token=self.settings.aws_session_token,
-        )
+        self.s3_client = boto3.client("s3", self.settings.region)
 
     def is_file_exists(self, file_name: str) -> bool:
         try:
