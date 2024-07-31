@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, status, Depends
+from fastapi import APIRouter, status, Depends, Request
 from fastapi_cognito import CognitoToken
 
 from src.core.auth import cognito_auth
@@ -31,6 +31,13 @@ async def login(params: LoginSchema, service: ServiceDep) -> LoginSuccessRespons
     return service.login(params)
 
 
-@router.get("/current-user", status_code=status.HTTP_200_OK)
-async def get_current_user(service: ServiceDep, auth: CognitoToken = Depends(cognito_auth)):
-    return {"aaa": auth.username}  # service.get_user(credentials.jwt_token)
+@router.get(
+    "/current-user",
+    status_code=status.HTTP_200_OK,
+    dependencies=[Depends(cognito_auth)]
+)
+async def get_current_user(request: Request, service: ServiceDep):
+    # Auth token must be present because of the cognito_auth dependency
+    token = request.headers.get("Authorization").split(" ")[1]
+
+    return service.get_user(token)
