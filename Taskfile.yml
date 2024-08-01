@@ -13,6 +13,14 @@ tasks:
     cmds:
       - docker build --tag ac/courses-api:latest .
 
+  format:
+    desc: Format the code
+    cmds:
+      - ruff format .
+      - ruff check . --fix
+    aliases:
+      - f
+
   run-mongo:
     desc: Run local mongodb container
     cmds:

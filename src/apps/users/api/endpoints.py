@@ -1,16 +1,15 @@
 from typing import Annotated
 
-from fastapi import APIRouter, status, Depends, Request
-from fastapi_cognito import CognitoToken
+from fastapi import APIRouter, Depends, Request, status
 
-from src.core.auth import cognito_auth
 from src.apps.users.api.schemas import (
-    LoginSchema,
     CreateUserSchema,
+    LoginSchema,
     LoginSuccessResponse,
 )
-from src.apps.users.service import CognitoService
 from src.apps.users.deps import cognito_service
+from src.apps.users.service import CognitoService
+from src.core.auth import cognito_auth
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -34,7 +33,7 @@ async def login(params: LoginSchema, service: ServiceDep) -> LoginSuccessRespons
 @router.get(
     "/current-user",
     status_code=status.HTTP_200_OK,
-    dependencies=[Depends(cognito_auth)]
+    dependencies=[Depends(cognito_auth)],
 )
 async def get_current_user(request: Request, service: ServiceDep):
     # Auth token must be present because of the cognito_auth dependency

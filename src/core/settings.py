@@ -1,13 +1,12 @@
-from typing import Any
 from functools import lru_cache
+from typing import Any
 
-from pydantic_settings import SettingsConfigDict, BaseSettings as _BaseSettings
+from pydantic_settings import BaseSettings as _BaseSettings
+from pydantic_settings import SettingsConfigDict
 
 
 class BaseSettings(_BaseSettings):
-    model_config = SettingsConfigDict(
-        env_file="../.env"
-    )
+    model_config = SettingsConfigDict(env_file="../.env")
 
 
 class ApiSettings(BaseSettings):
@@ -30,7 +29,7 @@ class CognitoSettings(BaseSettings):
     client_id: str = "6r70ag4thnsitfb378fh87tj92"
     pool_id: str = "us-east-1_U2F78N1y3"
     region: str = "us-east-1"
-    
+
     check_expiration: bool = True
     jwt_header_prefix: str = "Bearer"
     jwt_header_name: str = "Authorization"
@@ -38,7 +37,7 @@ class CognitoSettings(BaseSettings):
         "default": {
             "region": region,
             "userpool_id": pool_id,
-            "app_client_id": [client_id]
+            "app_client_id": [client_id],
         }
     }
 

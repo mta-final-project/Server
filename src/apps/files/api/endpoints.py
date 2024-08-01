@@ -1,14 +1,15 @@
-
-from fastapi import APIRouter, UploadFile, status, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, status
 from fastapi.responses import RedirectResponse
+from fastapi_cognito import CognitoToken
+
 from src.apps.files import service
-from src.apps.files.models import FileMetadata, FileInfo
+from src.apps.files.models import FileInfo, FileMetadata
+from src.core.auth import cognito_auth
 
 router = APIRouter()
 service = service.S3Service()
 
 
-# TODO - Check how to use Depends in order not to repeat get_settings() and get_client in each endpoint
 @router.get("/download", status_code=status.HTTP_200_OK)
 async def download(
     file_name: str,
@@ -36,7 +37,9 @@ async def metadata(file_name: str) -> FileMetadata:
 
 
 @router.get("/list-folders", status_code=status.HTTP_200_OK)
-async def list_folders(path: str = "") -> list[str]:
+async def list_folders(
+    path: str = "", auth: CognitoToken = Depends(cognito_auth)
+) -> list[str]:
     return await service.s3_list_folders(path)
 
 

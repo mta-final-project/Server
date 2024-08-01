@@ -2,7 +2,6 @@ from typing import Self
 
 from pydantic import BaseModel, EmailStr, Field
 
-
 UserAttribute = dict[str, str]
 
 

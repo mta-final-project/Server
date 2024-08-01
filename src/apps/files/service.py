@@ -1,8 +1,9 @@
 import boto3
-from fastapi import File, HTTPException, status
-from src.core.settings import get_settings
 from botocore.exceptions import ClientError
-from src.apps.files.models import FileMetadata, FileInfo
+from fastapi import File, HTTPException, status
+
+from src.apps.files.models import FileInfo, FileMetadata
+from src.core.settings import get_settings
 
 
 class S3Service:
