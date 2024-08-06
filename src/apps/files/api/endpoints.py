@@ -1,7 +1,10 @@
+from typing import Annotated
+
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, status
 from fastapi.responses import RedirectResponse
 
-from src.apps.files import service
+from src.apps.files.service import S3Service
+from src.apps.files.deps import s3_service
 from src.apps.files.models import FileInfo, FileMetadata
 from src.core.auth import cognito_auth
 
@@ -11,12 +14,13 @@ router = APIRouter(
     dependencies=[Depends(cognito_auth)]
 )
 
-service = service.S3Service()
+S3ServiceDep = Annotated[S3Service, Depends(s3_service)]
 
 
 @router.get("/download", status_code=status.HTTP_200_OK)
 async def download(
     file_name: str,
+    service: S3ServiceDep
 ) -> RedirectResponse:
     if not file_name:
         raise HTTPException(
@@ -27,12 +31,12 @@ async def download(
 
 
 @router.post("/upload", status_code=status.HTTP_201_CREATED)
-async def upload(file: UploadFile) -> None:
+async def upload(file: UploadFile, service: S3ServiceDep) -> None:
     await service.s3_upload(file)
 
 
 @router.get("/metadata", status_code=status.HTTP_200_OK)
-async def metadata(file_name: str) -> FileMetadata:
+async def metadata(file_name: str, service: S3ServiceDep) -> FileMetadata:
     if not file_name:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="No file name provided"
@@ -41,10 +45,10 @@ async def metadata(file_name: str) -> FileMetadata:
 
 
 @router.get("/list-folders", status_code=status.HTTP_200_OK)
-async def list_folders(path: str = "") -> list[str]:
+async def list_folders(service: S3ServiceDep, path: str = "") -> list[str]:
     return await service.s3_list_folders(path)
 
 
 @router.get("/list-objects", status_code=status.HTTP_200_OK)
-async def list_objects(path: str = "") -> list[FileInfo]:
+async def list_objects(service: S3ServiceDep, path: str = "") -> list[FileInfo]:
     return await service.s3_list_objects(path)
