@@ -3,8 +3,8 @@ from typing import Self
 import pandas as pd
 from pydantic import BaseModel, Field
 
-from src.apps.courses.models.column_map import Column
-from src.apps.courses.models.lesson import Lesson
+from src.models.column_map import Column
+from src.models.lesson import Lesson
 
 GROUP_TYPE = {
     1: "שיעור עם מבחן",

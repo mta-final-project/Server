@@ -2,7 +2,7 @@ from collections import defaultdict
 
 from pydantic import BaseModel, Field
 
-from src.apps.courses.models.lesson import TimeSlot
+from src.models.lesson import TimeSlot
 
 
 class Schedule(BaseModel):

@@ -1,9 +1,9 @@
 from fastapi import APIRouter, HTTPException, UploadFile, status, Depends
 
 from src.core.auth import cognito_auth
-from src.apps.courses import service
-from src.apps.courses.api.schemas import CourseViewSchema
-from src.apps.courses.models import Course
+from src.services import courses as service
+from src.api.courses.schemas import CourseViewSchema
+from src.models.course import Course
 
 router = APIRouter(prefix="/courses", tags=["courses"])
 

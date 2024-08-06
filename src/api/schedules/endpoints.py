@@ -2,10 +2,9 @@ from beanie import PydanticObjectId
 from fastapi import APIRouter, HTTPException, Query, status, Depends
 
 from src.core.auth import cognito_auth
-from src.apps.courses.models import Course
-from src.apps.schedule import service
-from src.apps.schedule.api.schemas import SelectedGroupsSchema, UpdateScheduleSchema
-from src.apps.schedule.models import CoursesSchedule, EnrichedGroup
+from src.models import Course, CoursesSchedule, EnrichedGroup
+from src.services import schedule as service
+from src.api.schedules.schemas import SelectedGroupsSchema, UpdateScheduleSchema
 
 router = APIRouter(
     prefix="/schedule",

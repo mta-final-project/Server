@@ -2,7 +2,7 @@ import boto3
 from botocore.exceptions import ClientError
 from fastapi import File, HTTPException, status
 
-from src.apps.files.models import FileInfo, FileMetadata
+from src.api.files.schemas import FileInfo, FileMetadata
 from src.core.settings import get_settings
 
 

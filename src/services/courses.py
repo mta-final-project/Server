@@ -2,7 +2,7 @@ import io
 
 import pandas as pd
 
-from src.apps.courses.models import Column, Course, Group, Lesson
+from src.models import Column, Course, Group, Lesson
 
 LECTURE = "שיעור"
 EXERCISE = "תרגיל"

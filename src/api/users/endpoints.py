@@ -2,13 +2,13 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, Request, status
 
-from src.apps.users.api.schemas import (
+from src.api.users.schemas import (
     CreateUserSchema,
     LoginSchema,
     LoginSuccessResponse,
 )
-from src.apps.users.deps import cognito_service
-from src.apps.users.service import CognitoService
+from src.api.users.deps import cognito_service
+from src.services.users import CognitoService
 from src.core.auth import cognito_auth
 
 router = APIRouter(prefix="/users", tags=["users"])

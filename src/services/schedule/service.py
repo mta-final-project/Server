@@ -1,6 +1,7 @@
-from src.apps.courses.models import Course, Group
-from src.apps.schedule.models import CoursesSchedule
-from src.apps.schedule.schedule import Schedule
+from src.models.course import Course
+from src.models.group import Group
+from src.models.schedule import CoursesSchedule
+from src.services.schedule.schedule import Schedule
 
 type SelectedGroups = list[Group]
 type Option = tuple[SelectedGroups, Schedule]

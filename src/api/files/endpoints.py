@@ -3,9 +3,9 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, status
 from fastapi.responses import RedirectResponse
 
-from src.apps.files.service import S3Service
-from src.apps.files.deps import s3_service
-from src.apps.files.models import FileInfo, FileMetadata
+from src.services.files import S3Service
+from src.api.files.deps import s3_service
+from src.api.files.schemas import FileInfo, FileMetadata
 from src.core.auth import cognito_auth
 
 router = APIRouter(

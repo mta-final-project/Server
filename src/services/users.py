@@ -1,6 +1,6 @@
 import boto3
 
-from src.apps.users.api.schemas import (
+from src.api.users.schemas import (
     CreateUserSchema,
     LoginSchema,
     LoginSuccessResponse,

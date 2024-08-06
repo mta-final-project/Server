@@ -3,7 +3,7 @@ from typing import Annotated
 import boto3
 from fastapi import Depends
 
-from src.apps.users.service import CognitoService
+from src.services.users import CognitoService
 from src.core.settings import get_settings
 
 

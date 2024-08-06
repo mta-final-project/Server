@@ -1,8 +1,8 @@
 from pydantic import Field
 
-from src.apps.courses.models.course import CourseMetadata
-from src.apps.courses.models.group import Group, GroupMetadata
-from src.apps.courses.models.lesson import Lesson
+from src.models.course import CourseMetadata
+from src.models.group import Group, GroupMetadata
+from src.models.lesson import Lesson
 from src.core.base_document import BaseDocument
 
 
