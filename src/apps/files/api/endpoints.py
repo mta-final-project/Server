@@ -1,12 +1,16 @@
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, status
 from fastapi.responses import RedirectResponse
-from fastapi_cognito import CognitoToken
 
 from src.apps.files import service
 from src.apps.files.models import FileInfo, FileMetadata
 from src.core.auth import cognito_auth
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/files",
+    tags=["Files"],
+    dependencies=[Depends(cognito_auth)]
+)
+
 service = service.S3Service()
 
 
@@ -37,9 +41,7 @@ async def metadata(file_name: str) -> FileMetadata:
 
 
 @router.get("/list-folders", status_code=status.HTTP_200_OK)
-async def list_folders(
-    path: str = "", auth: CognitoToken = Depends(cognito_auth)
-) -> list[str]:
+async def list_folders(path: str = "") -> list[str]:
     return await service.s3_list_folders(path)
 
 

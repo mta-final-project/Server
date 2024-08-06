@@ -1,12 +1,17 @@
 from beanie import PydanticObjectId
-from fastapi import APIRouter, HTTPException, Query, status
+from fastapi import APIRouter, HTTPException, Query, status, Depends
 
+from src.core.auth import cognito_auth
 from src.apps.courses.models import Course
 from src.apps.schedule import service
 from src.apps.schedule.api.schemas import SelectedGroupsSchema, UpdateScheduleSchema
 from src.apps.schedule.models import CoursesSchedule, EnrichedGroup
 
-router = APIRouter(prefix="/schedule", tags=["Schedule"])
+router = APIRouter(
+    prefix="/schedule",
+    tags=["Schedule"],
+    dependencies=[Depends(cognito_auth)]
+)
 
 
 async def _get_schedule(_id: PydanticObjectId) -> CoursesSchedule:
