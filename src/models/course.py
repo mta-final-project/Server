@@ -3,9 +3,9 @@ from typing import Self
 import pandas as pd
 from pydantic import BaseModel, Field
 
+from src.core.base_document import BaseDocument
 from src.models.column_map import Column
 from src.models.group import Group
-from src.core.base_document import BaseDocument
 
 
 class CourseMetadata(BaseModel):

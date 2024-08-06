@@ -3,8 +3,8 @@ from typing import Annotated
 import boto3
 from fastapi import Depends
 
-from src.services.users import CognitoService
 from src.core.settings import get_settings
+from src.services.users import CognitoService
 
 
 def cognito_client() -> boto3.client:

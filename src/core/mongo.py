@@ -9,6 +9,4 @@ async def init(mongo_url: str, mongo_database: str):
     client = AsyncIOMotorClient(mongo_url)
 
     # Initialize beanie with the Sample document class and a database
-    await init_beanie(
-        database=client[mongo_database], document_models=[Course, User]
-    )
+    await init_beanie(database=client[mongo_database], document_models=[Course, User])

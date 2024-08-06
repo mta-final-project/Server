@@ -1,9 +1,9 @@
-from fastapi import APIRouter, HTTPException, UploadFile, status, Depends
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, status
 
-from src.core.auth import cognito_auth
-from src.services import courses as service
 from src.api.courses.schemas import CourseViewSchema
+from src.core.auth import cognito_auth
 from src.models.course import Course
+from src.services import courses as service
 
 router = APIRouter(prefix="/courses", tags=["courses"])
 
@@ -12,7 +12,7 @@ router = APIRouter(prefix="/courses", tags=["courses"])
     "",
     status_code=status.HTTP_200_OK,
     response_model=list[CourseViewSchema],
-    dependencies=[Depends(cognito_auth)]
+    dependencies=[Depends(cognito_auth)],
 )
 async def list_courses() -> list[Course]:
     return await service.list_courses()

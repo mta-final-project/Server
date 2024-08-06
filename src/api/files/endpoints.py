@@ -3,25 +3,20 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, status
 from fastapi.responses import RedirectResponse
 
-from src.services.files import S3Service
 from src.api.files.deps import s3_service
 from src.api.files.schemas import FileInfo, FileMetadata
 from src.core.auth import cognito_auth
+from src.services.files import S3Service
 
 router = APIRouter(
-    prefix="/files",
-    tags=["Files"],
-    dependencies=[Depends(cognito_auth)]
+    prefix="/files", tags=["Files"], dependencies=[Depends(cognito_auth)]
 )
 
 S3ServiceDep = Annotated[S3Service, Depends(s3_service)]
 
 
 @router.get("/download", status_code=status.HTTP_200_OK)
-async def download(
-    file_name: str,
-    service: S3ServiceDep
-) -> RedirectResponse:
+async def download(file_name: str, service: S3ServiceDep) -> RedirectResponse:
     if not file_name:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="No file name provided"

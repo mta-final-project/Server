@@ -1,9 +1,9 @@
 from pydantic import Field
 
+from src.core.base_document import BaseDocument
 from src.models.course import CourseMetadata
 from src.models.group import Group, GroupMetadata
 from src.models.lesson import Lesson
-from src.core.base_document import BaseDocument
 
 
 class EnrichedGroup(Group):
