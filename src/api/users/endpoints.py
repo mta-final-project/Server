@@ -1,32 +1,23 @@
-from typing import Annotated
-
 from fastapi import APIRouter, Depends, Request, status
 
-from src.api.users.deps import cognito_service
+from src.api.common.deps import UsersServiceDep
 from src.api.users.schemas import (
     CreateUserSchema,
     LoginSchema,
     LoginSuccessResponse,
 )
 from src.core.auth import cognito_auth
-from src.services.users import CognitoService
 
 router = APIRouter(prefix="/users", tags=["users"])
 
 
-ServiceDep = Annotated[
-    CognitoService,
-    Depends(cognito_service),
-]
-
-
 @router.post("/register", status_code=status.HTTP_204_NO_CONTENT)
-async def register(params: CreateUserSchema, service: ServiceDep) -> None:
-    service.register(params)
+async def register(params: CreateUserSchema, service: UsersServiceDep) -> None:
+    await service.register(params)
 
 
 @router.post("/login", status_code=status.HTTP_200_OK)
-async def login(params: LoginSchema, service: ServiceDep) -> LoginSuccessResponse:
+async def login(params: LoginSchema, service: UsersServiceDep) -> LoginSuccessResponse:
     return service.login(params)
 
 
@@ -35,8 +26,8 @@ async def login(params: LoginSchema, service: ServiceDep) -> LoginSuccessRespons
     status_code=status.HTTP_200_OK,
     dependencies=[Depends(cognito_auth)],
 )
-async def get_current_user(request: Request, service: ServiceDep):
+async def get_current_user(request: Request, service: UsersServiceDep):
     # Auth token must be present because of the cognito_auth dependency
-    token = request.headers.get("Authorization").split(" ")[1]
+    token = service.get_auth_token(request)
 
     return service.get_user(token)

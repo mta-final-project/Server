@@ -1,4 +1,5 @@
 import boto3
+from fastapi import Request
 
 from src.api.users.schemas import (
     CreateUserSchema,
@@ -6,6 +7,7 @@ from src.api.users.schemas import (
     LoginSuccessResponse,
     UserSchema,
 )
+from src.models import User
 
 
 class CognitoService:
@@ -13,8 +15,8 @@ class CognitoService:
         self._client = client
         self._client_id = client_id
 
-    def register(self, params: CreateUserSchema) -> None:
-        _ = self._client.sign_up(
+    async def register(self, params: CreateUserSchema) -> None:
+        response = self._client.sign_up(
             ClientId=self._client_id,
             Username=params.email,
             Password=params.password,
@@ -23,6 +25,25 @@ class CognitoService:
                 {"Name": "family_name", "Value": params.last_name},
             ],
         )
+        new_user = User(
+            cognito_id=response["UserSub"],
+            email=params.email
+        )
+        await new_user.save()
+
+    def resend_confirmation_email(self, email: str) -> None:
+        self._client.resend_confirmation_code(
+            ClientId=self._client_id,
+            Username=email
+        )
+
+    async def delete_user(self, token: str) -> None:
+        user_info = self.get_user(token)
+        self._client.delete_user(
+            AccessToken=token,
+        )
+        user = await User.find_one(email=user_info.email)
+        await user.delete()
 
     def login(self, params: LoginSchema) -> LoginSuccessResponse:
         response = self._client.initiate_auth(
@@ -38,3 +59,7 @@ class CognitoService:
         )
 
         return UserSchema.from_cognito(response["UserAttributes"])
+
+    @staticmethod
+    def get_auth_token(request: Request) -> str:
+        return request.headers.get("Authorization").split(" ")[1]

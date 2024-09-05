@@ -20,3 +20,9 @@ def cognito_service(
     client_id: Annotated[str, Depends(cognito_client_id)],
 ) -> CognitoService:
     return CognitoService(client, client_id)
+
+
+UsersServiceDep = Annotated[
+    CognitoService,
+    Depends(cognito_service),
+]
