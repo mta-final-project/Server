@@ -30,4 +30,4 @@ async def get_current_user(request: Request, service: UsersServiceDep):
     # Auth token must be present because of the cognito_auth dependency
     token = service.get_auth_token(request)
 
-    return service.get_user(token)
+    return service.get_user_info(token)

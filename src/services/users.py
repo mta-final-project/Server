@@ -25,20 +25,14 @@ class CognitoService:
                 {"Name": "family_name", "Value": params.last_name},
             ],
         )
-        new_user = User(
-            cognito_id=response["UserSub"],
-            email=params.email
-        )
+        new_user = User(cognito_id=response["UserSub"], email=params.email)
         await new_user.save()
 
     def resend_confirmation_email(self, email: str) -> None:
-        self._client.resend_confirmation_code(
-            ClientId=self._client_id,
-            Username=email
-        )
+        self._client.resend_confirmation_code(ClientId=self._client_id, Username=email)
 
     async def delete_user(self, token: str) -> None:
-        user_info = self.get_user(token)
+        user_info = self.get_user_info(token)
         self._client.delete_user(
             AccessToken=token,
         )
@@ -53,12 +47,20 @@ class CognitoService:
         )
         return LoginSuccessResponse(**response["AuthenticationResult"])
 
-    def get_user(self, token: str) -> UserSchema:
+    def get_user_info(self, token: str) -> UserSchema:
         response = self._client.get_user(
             AccessToken=token,
         )
 
         return UserSchema.from_cognito(response["UserAttributes"])
+
+    async def get_user_by_token(self, token: str) -> User:
+        user_info = self.get_user_info(token)
+        return await User.find_one(email=user_info.email)
+
+    async def get_user_by_request(self, request: Request) -> User:
+        token = self.get_auth_token(request)
+        return await self.get_user_by_token(token)
 
     @staticmethod
     def get_auth_token(request: Request) -> str:

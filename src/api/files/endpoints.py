@@ -1,8 +1,9 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, status
+from fastapi import APIRouter, Depends, HTTPException, Request, UploadFile, status
 from fastapi.responses import RedirectResponse
 
+from src.api.common.deps import UsersServiceDep
 from src.api.files.deps import s3_service
 from src.api.files.schemas import FileInfo, FileMetadata
 from src.core.auth import cognito_auth
@@ -47,3 +48,27 @@ async def list_folders(service: S3ServiceDep, path: str = "") -> list[str]:
 @router.get("/list-objects", status_code=status.HTTP_200_OK)
 async def list_objects(service: S3ServiceDep, path: str = "") -> list[FileInfo]:
     return await service.s3_list_objects(path)
+
+
+@router.get("/favorites", status_code=status.HTTP_200_OK)
+async def favorites(request: Request, user_service: UsersServiceDep) -> list[str]:
+    user = await user_service.get_user_by_request(request)
+    return user.favorite_courses
+
+
+@router.post("/favorites", status_code=status.HTTP_201_CREATED)
+async def add_favorite(
+    request: Request, file_name: str, user_service: UsersServiceDep
+) -> None:
+    user = await user_service.get_user_by_request(request)
+    user.favorite_courses.append(file_name)
+    await user_service.update_user(user)
+
+
+@router.delete("/favorites", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_favorite(
+    request: Request, file_name: str, user_service: UsersServiceDep
+) -> None:
+    user = await user_service.get_user_by_request(request)
+    user.favorite_courses.remove(file_name)
+    await user_service.update_user(user)
