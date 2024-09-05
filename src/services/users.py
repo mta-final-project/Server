@@ -36,7 +36,7 @@ class CognitoService:
         self._client.delete_user(
             AccessToken=token,
         )
-        user = await User.find_one(email=user_info.email)
+        user = await User.find_one(User.email == user_info.email)
         await user.delete()
 
     def login(self, params: LoginSchema) -> LoginSuccessResponse:
@@ -56,7 +56,7 @@ class CognitoService:
 
     async def get_user_by_token(self, token: str) -> User:
         user_info = self.get_user_info(token)
-        return await User.find_one(email=user_info.email)
+        return await User.find_one(User.email == user_info.email)
 
     async def get_user_by_request(self, request: Request) -> User:
         token = self.get_auth_token(request)

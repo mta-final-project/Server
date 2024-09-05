@@ -62,7 +62,7 @@ async def add_favorite(
 ) -> None:
     user = await user_service.get_user_by_request(request)
     user.favorite_courses.append(file_name)
-    await user_service.update_user(user)
+    await user.save()
 
 
 @router.delete("/favorites", status_code=status.HTTP_204_NO_CONTENT)
@@ -71,4 +71,4 @@ async def delete_favorite(
 ) -> None:
     user = await user_service.get_user_by_request(request)
     user.favorite_courses.remove(file_name)
-    await user_service.update_user(user)
+    await user.save()

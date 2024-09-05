@@ -31,3 +31,13 @@ async def get_current_user(request: Request, service: UsersServiceDep):
     token = service.get_auth_token(request)
 
     return service.get_user_info(token)
+
+
+@router.delete(
+    "/delete",
+    status_code=status.HTTP_204_NO_CONTENT,
+    dependencies=[Depends(cognito_auth)],
+)
+async def delete_user(request: Request, service: UsersServiceDep) -> None:
+    token = service.get_auth_token(request)
+    await service.delete_user(token)

@@ -1,6 +1,5 @@
-from pydantic import Field
+from pydantic import Field, BaseModel
 
-from src.core.base_document import BaseDocument
 from src.models.course import CourseMetadata
 from src.models.group import Group, GroupMetadata
 from src.models.lesson import Lesson
@@ -15,7 +14,7 @@ class ScheduleItem(Lesson):
     group: GroupMetadata
 
 
-class CoursesSchedule(BaseDocument):
+class CoursesSchedule(BaseModel):
     schedule: dict[int, list[ScheduleItem]] = Field(default_factory=dict)
 
     def get_day(self, day: int) -> list[ScheduleItem]:
