@@ -1,10 +1,12 @@
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from botocore.exceptions import ClientError
 
 from src.api import router
 from src.core.lifespan import lifespan
 from src.core.settings import get_settings
+from src.core.error_hanlers import handle_boto_error
 
 app = FastAPI(lifespan=lifespan)
 app.include_router(router)
@@ -15,6 +17,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.add_exception_handler(ClientError, handle_boto_error)
 
 
 if __name__ == "__main__":
