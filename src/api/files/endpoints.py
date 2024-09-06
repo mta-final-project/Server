@@ -58,17 +58,17 @@ async def favorites(request: Request, user_service: UsersServiceDep) -> list[str
 
 @router.post("/favorites", status_code=status.HTTP_201_CREATED)
 async def add_favorite(
-    request: Request, file_name: str, user_service: UsersServiceDep
+    request: Request, course: str, user_service: UsersServiceDep
 ) -> None:
     user = await user_service.get_user_by_request(request)
-    user.favorite_courses.append(file_name)
+    user.favorite_courses.append(course)
     await user.save()
 
 
 @router.delete("/favorites", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_favorite(
-    request: Request, file_name: str, user_service: UsersServiceDep
+    request: Request, course: str, user_service: UsersServiceDep
 ) -> None:
     user = await user_service.get_user_by_request(request)
-    user.favorite_courses.remove(file_name)
+    user.favorite_courses.remove(course)
     await user.save()
