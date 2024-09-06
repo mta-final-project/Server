@@ -43,7 +43,7 @@ async def get_options(
     return result
 
 
-@router.patch("/{_id}", status_code=status.HTTP_200_OK)
+@router.patch("/", status_code=status.HTTP_200_OK)
 async def update_schedule(
     request: Request, user_service: UsersServiceDep, params: UpdateScheduleSchema
 ) -> None:
@@ -61,7 +61,7 @@ async def update_schedule(
     await user.save()
 
 
-@router.delete("/{schedule_id}/{group_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{group_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_group(
     request: Request,
     group_id: int,
