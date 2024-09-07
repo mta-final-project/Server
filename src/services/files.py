@@ -1,5 +1,7 @@
 import boto3
+from botocore import UNSIGNED
 from botocore.exceptions import ClientError
+from botocore.config import Config
 from fastapi import File, HTTPException, status
 
 from src.api.files.schemas import FileInfo, FileMetadata
@@ -9,7 +11,7 @@ from src.core.settings import get_settings
 class S3Service:
     def __init__(self):
         self.settings = get_settings().s3
-        self.s3_client = boto3.client("s3", self.settings.region)
+        self.s3_client = boto3.client('s3', config=Config(signature_version=UNSIGNED))
 
     def is_file_exists(self, file_name: str) -> bool:
         try:
@@ -51,11 +53,14 @@ class S3Service:
         )
 
     async def s3_list_folders(self, path: str) -> list[str]:
+        if path:
+            path = path + "/"
+
         response = self.s3_client.list_objects_v2(
             Bucket=self.settings.bucket_name, Delimiter="/", Prefix=path
         )
-        files = [file["Prefix"][:-1] for file in response.get("CommonPrefixes", [])]
-        return files
+        subfolders = [file["Prefix"][:-1] for file in response.get("CommonPrefixes", [])]
+        return subfolders
 
     async def s3_list_objects(self, path: str) -> list[FileInfo]:
         response = self.s3_client.list_objects_v2(
