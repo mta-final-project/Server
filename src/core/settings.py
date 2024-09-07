@@ -15,7 +15,7 @@ class ApiSettings(BaseSettings):
 
 
 class MongoSettings(BaseSettings):
-    url: str = "mongodb://user:pass@localhost:27017"
+    url: str = "mongodb+srv://ac-user:Password1@ac-cluster.3qj8y.mongodb.net/?retryWrites=true&w=majority&appName=AC-Cluster"
     database: str = "academease"
 
 
