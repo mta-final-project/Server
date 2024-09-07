@@ -3,8 +3,8 @@ from src.models.group import Group
 from src.models.schedule import CoursesSchedule
 from src.services.schedule.schedule import Schedule
 
-type SelectedGroups = list[Group]
-type Option = tuple[SelectedGroups, Schedule]
+SelectedGroups = list[Group]
+Option = tuple[SelectedGroups, Schedule]
 
 
 def get_optional_combinations(
