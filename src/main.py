@@ -7,6 +7,7 @@ from src.api import router
 from src.core.lifespan import lifespan
 from src.core.settings import get_settings
 from src.core.error_hanlers import handle_boto_error
+from src.core.middlewares import add_process_time_header
 
 app = FastAPI(lifespan=lifespan)
 app.include_router(router)
@@ -18,6 +19,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 app.add_exception_handler(ClientError, handle_boto_error)
+app.middleware("http")(add_process_time_header)
 
 
 if __name__ == "__main__":
