@@ -21,7 +21,7 @@ class MongoSettings(BaseSettings):
 
 class S3Settings(BaseSettings):
     region: str = "us-east-1"
-    bucket_name: str = "ac-docs"
+    bucket_name: str = "academease-materials"
     presigned_url_expiration: int = 3600
 
 
