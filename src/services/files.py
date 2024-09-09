@@ -1,7 +1,7 @@
 import boto3
 from botocore import UNSIGNED
-from botocore.exceptions import ClientError
 from botocore.config import Config
+from botocore.exceptions import ClientError
 from fastapi import File, HTTPException, status
 
 from src.api.files.schemas import FileInfo, FileMetadata
@@ -11,13 +11,11 @@ from src.core.settings import get_settings
 class S3Service:
     def __init__(self):
         self.settings = get_settings().s3
-        self.s3_client = boto3.client('s3', config=Config(signature_version=UNSIGNED))
+        self.s3_client = boto3.client("s3", config=Config(signature_version=UNSIGNED))
 
     def is_file_exists(self, file_name: str) -> bool:
         try:
-            self.s3_client.head_object(
-                Bucket=self.settings.bucket_name, Key=file_name
-            )
+            self.s3_client.head_object(Bucket=self.settings.bucket_name, Key=file_name)
         except ClientError as error:
             if error.response["Error"]["Message"] == "Not Found":
                 return False
@@ -48,9 +46,7 @@ class S3Service:
 
     async def s3_upload(self, file: File) -> None:
         file_name = file.filename
-        self.s3_client.upload_fileobj(
-            file.file, self.settings.bucket_name, file_name
-        )
+        self.s3_client.upload_fileobj(file.file, self.settings.bucket_name, file_name)
 
     async def s3_list_folders(self, path: str) -> list[str]:
         if path:
@@ -59,7 +55,9 @@ class S3Service:
         response = self.s3_client.list_objects_v2(
             Bucket=self.settings.bucket_name, Delimiter="/", Prefix=path
         )
-        subfolders = [file["Prefix"][:-1] for file in response.get("CommonPrefixes", [])]
+        subfolders = [
+            file["Prefix"][:-1] for file in response.get("CommonPrefixes", [])
+        ]
         return subfolders
 
     async def s3_list_objects(self, path: str) -> list[FileInfo]:

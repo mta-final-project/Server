@@ -1,4 +1,4 @@
-from pydantic import Field, BaseModel
+from pydantic import BaseModel, Field
 
 from src.models.course import CourseMetadata
 from src.models.group import Group, GroupMetadata

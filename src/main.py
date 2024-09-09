@@ -1,13 +1,13 @@
 import uvicorn
+from botocore.exceptions import ClientError
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from botocore.exceptions import ClientError
 
 from src.api import router
-from src.core.lifespan import lifespan
-from src.core.settings import get_settings
 from src.core.error_hanlers import handle_boto_error
+from src.core.lifespan import lifespan
 from src.core.middlewares import add_process_time_header
+from src.core.settings import get_settings
 
 app = FastAPI(lifespan=lifespan)
 app.include_router(router)
