@@ -1,11 +1,10 @@
 version: '3.8'
 services:
   app:
-    image: academ/courses-server:latest
-    container_name: courses-server
+    image: ac-courses-api:latest
     restart: unless-stopped
     ports:
-      - '8000:8000'
+      - '8001:8001'
     environment:
       - MONGO__URL=mongodb://user:pass@mongodb:27017
     depends_on:
@@ -13,7 +12,6 @@ services:
 
   mongodb:
     image: mongo:6-jammy
-    container_name: courses-mongo
     restart: unless-stopped
     expose:
       - 27017
